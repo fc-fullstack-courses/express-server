@@ -1,5 +1,5 @@
 const express = require('express');
-const { USER_CREATION_SCHEMA } = require('./utils/validationSchemas');
+const { validateUserMW } = require('./middlewares/userMW');
 
 const app = express();
 
@@ -13,28 +13,16 @@ app.get('/users', (req, res) => {
 
 const bodyParser = express.json();
 
-app.post(
-  '/users',
-  bodyParser,
-  async (req, res, next) => {
-    try {
-      await USER_CREATION_SCHEMA.validate(req.body);
-      next();
-    } catch (error) {
-      res.status(400).send(error.message);
-    }
-  },
-  async (req, res) => {
-    const newUser = {
-      ...req.body,
-      id: Date.now(),
-    };
+app.post('/users', bodyParser, validateUserMW, async (req, res) => {
+  const newUser = {
+    ...req.body,
+    id: Date.now(),
+  };
 
-    usersDB.push(newUser);
+  usersDB.push(newUser);
 
     res.send(newUser);
-  }
-);
+});
 
 app.get('/test*', (req, res) => {
   res.send(`request.path is ${req.path} and request.method is ${req.method}`);
