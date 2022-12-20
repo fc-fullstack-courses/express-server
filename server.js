@@ -1,30 +1,36 @@
 const express = require('express');
-
+const yup = require('yup');
 const app = express();
 
 const PORT = 5000;
 
-// app.get('/users', (req, res) => {
-//   res.send([{ id: 1 }, { id: 2 }]);
-// });
+const usersDB = [];
+
+app.get('/users', (req, res) => {
+  res.send(usersDB);
+});
+
+const bodyParser = express.json();
+
+const USER_CREATION_SCHEMA = yup.object({
+  login: yup.string().required(),
+  password: yup.string().required(),
+});
 
 app.post(
   '/users',
-  (req, res, next) => {
-    console.log('first middleware');
-
-    if(true) {
+  bodyParser,
+  async (req, res, next) => {
+    try {
+      await USER_CREATION_SCHEMA.validate(req.body);
       next();
-    } else {
-      res.send('bad stuff happened');
+    } catch (error) {
+      res.status(400).send(error.message);
     }
   },
-  (req, res, next) => {
-    console.log('second middleware');
-    next();
-  },
-  (req, res) => {
-    console.log('final func');
+  async (req, res) => {
+    console.log(req.body);
+    console.log(usersDB);
     res.send('user created');
   }
 );
