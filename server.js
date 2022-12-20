@@ -1,5 +1,6 @@
 const express = require('express');
-const yup = require('yup');
+const { USER_CREATION_SCHEMA } = require('./utils/validationSchemas');
+
 const app = express();
 
 const PORT = 5000;
@@ -11,11 +12,6 @@ app.get('/users', (req, res) => {
 });
 
 const bodyParser = express.json();
-
-const USER_CREATION_SCHEMA = yup.object({
-  login: yup.string().required(),
-  password: yup.string().required(),
-});
 
 app.post(
   '/users',
