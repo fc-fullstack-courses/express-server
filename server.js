@@ -12,6 +12,7 @@ app.get('/users', UserController.getUsers);
 app.get('/users/:userId', UserController.getUser);
 app.post('/users', bodyParser, validateUserMW, UserController.createUser);
 
+app.delete('/users/:userId', UserController.deleteUser);
 /*
 app.post
 app.put
