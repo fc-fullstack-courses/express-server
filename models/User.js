@@ -47,22 +47,8 @@ class User {
     const foundUser = await User.findOne(userId);
 
     if (foundUser) {
-      let updatedUser;
-      this.usersDB = this.usersDB.map((u) => {
-        const isSameUser = u.id === Number(userId);
-
-        if (!isSameUser) {
-          return u;
-        } else {
-          updatedUser = {
-            ...u,
-            ...newData,
-          };
-          return updatedUser;
-        }
-      });
-
-      return updatedUser;
+      Object.assign(foundUser, newData);
+      return foundUser;
     }
 
     throw new Error('User not found');
