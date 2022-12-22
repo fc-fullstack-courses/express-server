@@ -1,16 +1,16 @@
 const User = require('../models/User');
 
-module.exports.createUser = async (req, res) => {
+module.exports.createUser = async (req, res, next) => {
   const newUser = await User.create(req.body);
   res.send(newUser);
 };
 
-module.exports.getUsers = async (req, res) => {
+module.exports.getUsers = async (req, res, next) => {
   const users = await User.findAll();
   res.send(users);
 };
 
-module.exports.getUser = async (req, res) => {
+module.exports.getUser = async (req, res, next) => {
   const {
     params: { userId },
     // query: {page}
@@ -21,11 +21,11 @@ module.exports.getUser = async (req, res) => {
   if (foundUser) {
     res.send(foundUser);
   } else {
-    res.status(404).send('User not found');
+    next(new Error('User not found'));
   }
 };
 
-module.exports.deleteUser = async (req, res) => {
+module.exports.deleteUser = async (req, res, next) => {
   const {
     params: { userId },
   } = req;
@@ -34,11 +34,11 @@ module.exports.deleteUser = async (req, res) => {
     const deletedUser = await User.delete(userId);
     res.send(deletedUser);
   } catch (error) {
-    res.status(404).send(error.message);
+    next(error);
   }
 };
 
-module.exports.updateUser = async (req, res) => {
+module.exports.updateUser = async (req, res, next) => {
   const {
     params: { userId },
     body,
@@ -48,6 +48,6 @@ module.exports.updateUser = async (req, res) => {
     const updatedUser = await User.update(userId, body);
     res.send(updatedUser);
   } catch (error) {
-    res.status(404).send(error.message);
+    next(error);
   }
 };
