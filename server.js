@@ -1,7 +1,7 @@
-const https = require('https');
+const http = require('http');
 const app = require('./app');
 
-const server = https.createServer(app);
+const server = http.createServer(app);
 
 const PORT = 5000;
 
