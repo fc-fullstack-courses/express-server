@@ -1,4 +1,5 @@
 const createHttpError = require('http-errors');
+const NotFoundError = require('../errors/NotFoundError');
 const User = require('../models/User');
 
 module.exports.createUser = async (req, res, next) => {
@@ -36,7 +37,7 @@ module.exports.deleteUser = async (req, res, next) => {
     const deletedUser = await User.delete(userId);
     res.send(deletedUser);
   } catch (error) {
-    next(error);
+    next(new NotFoundError(error.message));
   }
 };
 
