@@ -9,12 +9,23 @@ const app = express();
 
 app.use(express.json());
 
-app.get('/users', UserController.getUsers);
-app.get('/users/:userId', UserController.getUser);
-app.post('/users', validateUserMW, UserController.createUser);
+app
+  .route('/users')
+  .get(UserController.getUsers)
+  .post(validateUserMW, UserController.createUser);
 
-app.delete('/users/:userId', UserController.deleteUser);
-app.put('/users/:userId', validateUserUpdateMW, UserController.updateUser);
+// app.get('/users', UserController.getUsers);
+// app.post('/users', validateUserMW, UserController.createUser);
+
+app
+  .route('/users/:userId')
+  .get(UserController.getUser)
+  .put(validateUserUpdateMW, UserController.updateUser)
+  .delete(UserController.deleteUser);
+
+// app.get('/users/:userId', UserController.getUser);
+// app.delete('/users/:userId', UserController.deleteUser);
+// app.put('/users/:userId', validateUserUpdateMW, UserController.updateUser);
 /*
 app.post
 app.put
