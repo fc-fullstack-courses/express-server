@@ -1,7 +1,8 @@
-const { ValidationError } = require("yup");
+const { ValidationError } = require('yup');
 
 async function handleErrors(err, req, res, next) {
-  res.status(500).send(err.message);
+  // console.log(err);
+  res.status(err.status || 500).send(err.message || 'Server error');
 }
 
 async function handleValidationError(err, req, res, next) {

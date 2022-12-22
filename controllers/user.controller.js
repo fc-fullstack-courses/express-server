@@ -1,3 +1,4 @@
+const createHttpError = require('http-errors');
 const User = require('../models/User');
 
 module.exports.createUser = async (req, res, next) => {
@@ -21,7 +22,8 @@ module.exports.getUser = async (req, res, next) => {
   if (foundUser) {
     res.send(foundUser);
   } else {
-    next(new Error('User not found'));
+    // new Error('User not found')
+    next(createHttpError(404, 'User not found', { test: true }));
   }
 };
 
